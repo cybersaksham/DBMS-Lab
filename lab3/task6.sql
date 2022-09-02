@@ -1,0 +1,25 @@
+SELECT S.rating, MIN(S.age) as minAge
+FROM SAILORS S
+GROUP BY S.rating;
+
+SELECT S.rating ,AVG(S.age) AS aveage
+FROM SAILORS S
+GROUP BY S.rating
+HAVING COUNT(*)>1;
+
+SELECT S.rating ,MIN(S.age) AS MinAge
+FROM SAILORS S WHERE S.age>=18
+GROUP BY S.rating
+HAVING COUNT(*)>1;
+
+SELECT S.sname
+FROM SAILORS S
+ORDER BY S.sname ASC;
+
+SELECT S.sname
+FROM SAILORS S
+ORDER BY S.sname DESC;
+
+SELECT S.sid
+FROM SAILORS S
+WHERE S.sname IS NULL;
