@@ -1,0 +1,21 @@
+CREATE TABLE RESERVES(
+	sid integer(3),
+	bid integer(3),
+	day DATE,
+	CONSTRAINT pk_reserves PRIMARY KEY(sid,bid) ,
+	CONSTRAINT fk_sailors FOREIGN KEY(sid) REFERENCES SAILORS(sid),
+	CONSTRAINT fk_boats FOREIGN KEY(bid) REFERENCES BOATS(bid)
+);
+
+insert into RESERVES VALUES (22,101, '1998-10-10');
+insert into RESERVES VALUES (22,102, '1998-10-10');
+insert into RESERVES VALUES (22,103, '1998-08-10');
+insert into RESERVES VALUES (22,104, '1998-07-10');
+insert into RESERVES VALUES (31,102, '1998-10-11');
+insert into RESERVES VALUES (31,103, '1998-06-11');
+insert into RESERVES VALUES (31,104, '1998-12-11');
+insert into RESERVES VALUES (64,101, '1998-05-09');
+insert into RESERVES VALUES (64,102, '1998-08-09');
+insert into RESERVES VALUES (74,103, '1998-08-09');
+
+SELECT * FROM RESERVES;
