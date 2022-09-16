@@ -1,0 +1,2 @@
+SELECT * FROM EMPLOYEE
+WHERE Dno = 1 OR Dno = 4;
