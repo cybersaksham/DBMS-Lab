@@ -1,1 +1,3 @@
-SELECT P.Pname, P.Pnumber
+SELECT P.Pname, P.Pnumber, COUNT(*) FROM PROJECT P
+INNER JOIN EMPLOYEE E ON E.Dno = P.Dnum
+GROUP BY P.Pnumber;

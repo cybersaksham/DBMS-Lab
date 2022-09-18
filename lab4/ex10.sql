@@ -1,0 +1,5 @@
+DELETE FROM DEPENDENT
+WHERE Dependent_name LIKE "A%"
+OR Dependent_name LIKE "J%";
+
+SELECT * FROM DEPENDENT;
