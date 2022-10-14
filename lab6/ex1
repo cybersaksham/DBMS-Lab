@@ -1,0 +1,17 @@
+DECLARE
+    A NUMBER := 12345;
+BEGIN
+    DECLARE
+        REV NUMBER := 0;
+        TMP NUMBER;
+    BEGIN
+        WHILE A>0 LOOP
+            TMP := REMAINDER(A, 10);
+            REV := REV * 10;
+            REV := REV + TMP;
+            A := FLOOR(A / 10);
+        END LOOP;
+        DBMS_OUTPUT.PUT_LINE('REVERSED: '||REV);
+    END;
+END;
+/

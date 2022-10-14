@@ -1,0 +1,23 @@
+DROP TABLE AREAS;
+
+create table AREAS ( 
+    radius number, 
+    area float
+);
+
+DECLARE 
+    PI CONSTANT FLOAT := 3.14; 
+BEGIN 
+    DECLARE 
+        AREA FLOAT; 
+    BEGIN 
+        FOR RAD IN 4..10 LOOP 
+            AREA := PI * RAD * RAD; 
+            INSERT INTO AREAS VALUES(RAD, AREA); 
+            DBMS_OUTPUT.PUT_LINE('RAD: '||RAD||' AREA: '||AREA); 
+        END LOOP; 
+    END; 
+END;
+/
+
+SELECT * FROM AREAS;
