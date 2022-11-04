@@ -1,0 +1,44 @@
+DROP TABLE SAILORS;
+
+CREATE TABLE SAILORS ( 
+	sid NUMBER(3) PRIMARY KEY, 
+	sname VARCHAR(20) NOT NULL, 
+	rating NUMBER(2) NOT NULL, 
+	age float(3) 
+);
+
+insert into SAILORS VALUES (22,'Dustin',7,45.0);
+insert into SAILORS VALUES (29,'Brutus',1,33.0);
+insert into SAILORS VALUES (31,'Lubber',8,55.5);
+insert into SAILORS VALUES (32,'Andy',8,25.5);
+insert into SAILORS VALUES (58,'Rusty',10,35.0);
+insert into SAILORS VALUES (64,'Horatio',7,35.0);
+insert into SAILORS VALUES (71,'Zorba',10,16.0);
+insert into SAILORS VALUES (74,'Horatio',9,35.0);
+insert into SAILORS VALUES (85,'Art',3,25.5);
+insert into SAILORS VALUES (95,'Bob',3,63.5);
+
+select * from SAILORS;
+
+CREATE OR REPLACE PROCEDURE findName2(tsid IN number, sid OUT SAILORS.sid%TYPE, sname OUT SAILORS.sname%TYPE,
+srating OUT SAILORS.rating%TYPE, sage OUT SAILORS.age%TYPE) IS
+BEGIN
+    SELECT sid INTO sid FROM SAILORS WHERE sid = tsid;
+    SELECT sname INTO sname FROM SAILORS WHERE sid = tsid;
+    SELECT rating INTO srating FROM SAILORS WHERE sid = tsid;
+    SELECT age INTO sage FROM SAILORS WHERE sid = tsid;
+END;
+/
+
+DECLARE
+    tm_sid numBer(3);
+    sid SAILORS.sid%TYPE;
+    sname SAILORS.sname%TYPE;
+    srating SAILORS.rating%TYPE;
+    sage SAILORS.age%TYPE;
+BEGIN
+    tm_sid := 22;
+    findName2(tm_sid, sid, sname, srating, sage);
+    dbms_output.put_line(sid||' '||sname||' '||srating||' '||sage);
+END;
+/

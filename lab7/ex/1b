@@ -1,0 +1,56 @@
+DROP TABLE STOREFACT;
+
+CREATE TABLE STOREFACT(
+	no NUMBER(5),
+	fact NUMBER(15)
+);
+
+INSERT INTO STOREFACT VALUES (1, NULL);
+INSERT INTO STOREFACT VALUES (2, NULL);
+INSERT INTO STOREFACT VALUES (3, NULL);
+INSERT INTO STOREFACT VALUES (4, NULL);
+INSERT INTO STOREFACT VALUES (5, NULL);
+INSERT INTO STOREFACT VALUES (6, NULL);
+INSERT INTO STOREFACT VALUES (7, NULL);
+INSERT INTO STOREFACT VALUES (8, NULL);
+INSERT INTO STOREFACT VALUES (9, NULL);
+
+SELECT * FROM  STOREFACT;
+
+CREATE OR REPLACE FUNCTION factorial(num STOREFACT.no%TYPE) RETURN NUMBER IS
+f_counter STOREFACT.no%TYPE;
+f_factorial NUMBER := 1;
+BEGIN
+    f_counter := num;
+    WHILE f_counter > 0 LOOP
+		f_factorial := f_factorial * f_counter;
+		f_counter := f_counter - 1;
+	END LOOP;
+	RETURN (f_factorial);
+END;
+/
+
+DECLARE
+	CURSOR f_cur IS select no from STOREFACT;
+	n_counter STOREFACT.no%TYPE;
+	n_factorial NUMBER := 1;
+	n_temp NUMBER;
+BEGIN
+	OPEN f_cur;
+	LOOP
+		FETCH f_cur INTO n_counter;
+		EXIT WHEN f_cur%NOTFOUND;
+		DBMS_OUTPUT.PUT_LINE('NoFetched:'||n_counter);
+		n_factorial := factorial(n_counter);
+		IF n_factorial < 500 THEN
+			DBMS_OUTPUT.PUT_LINE('factorial of ' || n_counter || ' is ' || n_factorial);
+		ELSE
+		    UPDATE STOREFACT SET STOREFACT.fact = n_factorial WHERE STOREFACT.no = n_counter;
+		    DBMS_OUTPUT.PUT_LINE('Factorial inserted into table STOREFACT');
+		END IF;
+	END LOOP;
+	CLOSE f_cur;
+END;
+/
+
+SELECT * FROM STOREFACT;

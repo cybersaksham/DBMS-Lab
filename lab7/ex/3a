@@ -1,0 +1,38 @@
+DROP TABLE SAILORS;
+
+CREATE TABLE SAILORS ( 
+	sid NUMBER(3) PRIMARY KEY, 
+	sname VARCHAR(20) NOT NULL, 
+	rating NUMBER(2) NOT NULL, 
+	age float(3) 
+);
+
+insert into SAILORS VALUES (22,'Dustin',7,45.0);
+insert into SAILORS VALUES (29,'Brutus',1,33.0);
+insert into SAILORS VALUES (31,'Lubber',8,55.5);
+insert into SAILORS VALUES (32,'Andy',8,25.5);
+insert into SAILORS VALUES (58,'Rusty',10,35.0);
+insert into SAILORS VALUES (64,'Horatio',7,35.0);
+insert into SAILORS VALUES (71,'Zorba',10,16.0);
+insert into SAILORS VALUES (74,'Horatio',9,35.0);
+insert into SAILORS VALUES (85,'Art',3,25.5);
+insert into SAILORS VALUES (95,'Bob',3,63.5);
+
+select * from SAILORS;
+
+CREATE OR REPLACE PROCEDURE findName(tsid IN number, name OUT varchar) IS
+CURSOR f_cur IS select sid from SAILORS;
+BEGIN
+    SELECT sname INTO name FROM SAILORS WHERE sid = tsid;
+END;
+/
+
+DECLARE
+    tm_sid numBer(3);
+    tname varchar(20);
+BEGIN
+    tm_sid := 22;
+    findName(tm_sid, tname );
+    dbms_output.put_line(tname);
+END;
+/
