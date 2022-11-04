@@ -27,8 +27,8 @@ CREATE TABLE LOAN(
 );
 
 CREATE TABLE BORROWER(
-	customer_name VARCHAR(20),
 	loan_number INT(8),
+	customer_name VARCHAR(20),
 	CONSTRAINT borwr_pk PRIMARY KEY(customer_name, loan_number),
 	CONSTRAINT borwr_fk1 FOREIGN KEY(customer_name) REFERENCES CUSTOMER(customer_name),
 	CONSTRAINT borwr_fk2 FOREIGN KEY(loan_number) REFERENCES LOAN(loan_number)
@@ -37,6 +37,7 @@ CREATE TABLE BORROWER(
 CREATE TABLE DEPOSITOR(
 	account_number INT(8),
 	customer_name VARCHAR(20),
+	CONSTRAINT dpstr_pk PRIMARY KEY(customer_name, account_number),
 	CONSTRAINT dpstr_fk1 FOREIGN KEY(account_number) REFERENCES ACCOUNT(account_number),
 	CONSTRAINT dpstr_fk2 FOREIGN KEY(customer_name) REFERENCES CUSTOMER(customer_name)
 );
