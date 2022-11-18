@@ -1,0 +1,214 @@
+-- Example 1
+CREATE OR REPLACE PROCEDURE findMin (x IN number, y IN number, z OUT number)
+IS
+BEGIN
+    IF x < y THEN
+        z := x;
+    ELSE
+        z := y;
+    END IF;
+END;
+/
+
+DECLARE
+    a number;
+    b number;
+    c number;
+BEGIN
+    a := 23;
+    b := 45;
+    findMin(a, b, c);
+   
+    dbms_output.put_line('Minimum of (23, 45) : ' || c);
+    findMin(30, 10, c);
+    dbms_output.put_line('Minimum of (' || a || ',' || b || ') is : ' || c);
+END;
+/
+
+
+-- Task 1
+CREATE OR REPLACE PROCEDURE proc_incr_rating(p_sno NUMBER, p_increment NUMBER)
+IS
+    vrating number;
+BEGIN
+    SELECT rating
+    INTO vrating
+    FROM sailors
+    WHERE sid=p_sno;
+    UPDATE sailors
+    SET rating = rating + p_increment
+    WHERE sid = p_sno;
+END proc_incr_rating;
+/
+
+execute proc_incr_rating(29, 1);
+
+SELECT * FROM SAILORS;
+
+
+-- Task 2
+CREATE OR REPLACE FUNCTION func_revised_salary(p_empno number)
+RETURN number
+IS
+    vincr employee.sal%TYPE;
+    vnet employee.sal%TYPE;
+    vempno employee.empno%TYPE;
+    vsal employee.sal%TYPE;
+    vcomm employee.comm%TYPE;
+BEGIN
+    SELECT empno, sal, comm
+    INTO vempno, vsal, vcomm
+        FROM employee
+        WHERE empno = p_empno;
+    vnet := vsal + vcomm;
+    IF vsal <= 20000 THEN
+        vincr := 0.20 * vnet;
+    ELSE IF vsal > 20000 AND vsal <= 30000 THEN
+        vincr := 0.30 * vnet;
+    ELSE
+        vincr := 0.40 * vnet;
+    END IF;
+    END IF;
+    RETURN (vincr + vsal);
+END func_revised_salary;
+/
+
+SELECT empno, sal, func_revised_salary(empno), comm FROM employee;
+SELECT * FROM employee;
+
+DECLARE
+    v_incr_sal number(7, 2);
+BEGIN
+    v_incr_sal := func_revised_salary(2);
+    dbms_output.put_line('incremented salary is:' || v_incr_sal);
+END;
+
+
+-- Task 3
+--INSERT INTO employee VALUES(4, 400, NULL);
+--INSERT INTO employee VALUES(5, 500, NULL);
+
+CREATE OR REPLACE FUNCTION func_retrn_comm(p_empno number)
+RETURN number
+IS
+    vincr employee.sal%TYPE;
+    vnet employee.sal%TYPE;
+    vempno employee.empno%TYPE;
+    vsal employee.sal%TYPE;
+    vcomm employee.sal%TYPE;
+BEGIN
+    SELECT empno, sal, NVL(comm, 0)
+    INTO vempno, vsal, vcomm
+    FROM employee
+    WHERE empno = p_empno;
+    RETURN (vcomm);
+END func_retrn_comm;
+/
+
+SELECT e.empno, e.sal, func_revised_salary(e.empno), e.comm
+FROM employee e
+WHERE e.comm = func_retrn_comm(5);
+
+
+-- Task 4
+DECLARE
+    v_sailor_id sailors.sid%TYPE;
+    v_name sailors.sname%TYPE;
+    v_rating sailors.rating%TYPE;
+    v_age sailors.age%TYPE;
+CURSOR v_sailor_cursor IS
+    SELECT sid, sname, rating, age
+    FROM sailors
+    ORDER BY sid;
+BEGIN
+    OPEN v_sailor_cursor;
+    LOOP
+        FETCH v_sailor_cursor
+            INTO v_sailor_id, v_name, v_rating, v_age;
+        EXIT WHEN v_sailor_cursor%NOTFOUND;
+        dbms_output.put_line('v_sailor_id=' || v_sailor_id || ', v_name=' || v_name || ', v_rating=' || v_rating || ', v_age=' || v_age);
+    END LOOP;
+    CLOSE v_sailor_cursor;
+END;
+
+
+-- Task 5
+Create table TempInfo(
+    name varchar2(20),
+    rec_date date,
+    age number(3,1)
+);
+
+declare
+v_sailor_id sailors.sid%TYPE;
+v_name sailors.sname%TYPE;
+v_rating sailors.rating%type;
+v_age sailors.age%type;
+
+cursor v_sailor_cursor
+    is
+    select sid,sname,rating,age from sailors order by sid desc;
+begin
+    open v_sailor_cursor;
+    if v_sailor_cursor%ISOPEN then
+        loop
+            fetch v_sailor_cursor into v_sailor_id,v_name,v_rating,v_age;
+            exit when v_sailor_cursor%notfound;
+            dbms_output.put_line('sailor_id = '||v_sailor_id||' sailor_name = '||v_name||' sailor_rating = '||v_rating||' sailor_age '||v_age);
+
+            INSERT INTO TempInfo VALUES (v_name,sysdate,v_age);
+        end loop;
+        commit;
+        close v_sailor_cursor;
+    else
+        dbms_output.put_line('Error opening Cursor');
+    end if;
+end;
+/
+
+
+-- Task 6
+DECLARE
+v_sailor_id sailors.sid%TYPE;
+v_rating sailors.rating%TYPE;
+CURSOR v_sailor_cursor
+    IS
+    SELECT sid,rating FROM sailors;
+BEGIN
+    OPEN v_sailor_cursor;
+    DBMS_OUTPUT.PUT_LINE(' SID Rating ');
+    DBMS_OUTPUT.PUT_LINE('------   --------' );
+    LOOP
+        FETCH v_sailor_cursor INTO v_sailor_id, v_rating;
+        exit WHEN v_sailor_cursor%ROWCOUNT > 4 OR v_sailor_cursor%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE( v_sailor_id ||' ' || v_rating);
+    END LOOP;
+CLOSE v_sailor_cursor;
+END;
+/
+
+
+-- Task 7
+create table products(
+product_id INTEGER PRIMARY KEY,
+product_price number(5,2)
+);
+
+create table product_price_audit(
+product_id INTEGER CONSTRAINT price_audit_fk_products REFERENCES products(product_id),
+old_price NUMBER(5,2),
+new_price NUMBER(5,2)
+);
+
+create or replace trigger before_product_price_update
+before update of product_price
+on products
+FOR EACH ROW WHEN (new.product_price < old.product_price * 0.75)
+begin
+    dbms_output.put_line('product_id = ' ||:old.product_id);
+    dbms_output.put_line('Old price = ' || :old.product_price);
+    dbms_output.put_line('New price = ' || :new.product_price);
+    dbms_output.put_line('The price reduction ismore than 25%');
+    INSERT INTO product_price_audit (product_id, old_price, new_price)
+    VALUES(:old.product_id,:old.product_price,:new.product_price);
+end before_product_price_update;

@@ -1,0 +1,71 @@
+DROP TABLE RESERVES;
+DROP TABLE SAILORS;
+DROP TABLE BOATS;
+DROP TABLE Employee;
+
+CREATE TABLE SAILORS(
+ sid number(3) PRIMARY KEY,
+ sname varchar2(20) NOT NULL,
+ rating number(2),
+ age float
+);
+
+CREATE TABLE BOATS
+( bid number(3) PRIMARY KEY,
+ bname VARCHAR2(12),
+ color VARCHAR2(8) NOT NULL
+);
+
+CREATE TABLE RESERVES(
+ sid number(3),
+ bid number(3),
+ day DATE,
+ PRIMARY KEY(sid, bid),
+ FOREIGN KEY(sid) references SAILORS(sid),
+ FOREIGN KEY(bid) references BOATS(bid)
+);
+
+CREATE TABLE Employee (
+    empno number,
+    sal number,
+    comm number
+);
+
+insert into SAILORS VALUES (22,'Dustin',7,45.0);
+insert into SAILORS VALUES (29,'Brutus',1,33.0);
+insert into SAILORS VALUES (31,'Lubber',8,55.5);
+insert into SAILORS VALUES (32,'Andy',8,25.5);
+insert into SAILORS VALUES (58,'Rusty',10,35.0);
+insert into SAILORS VALUES (64,'Horatio',7,35.0);
+insert into SAILORS VALUES (71,'Zorba',10,16.0);
+insert into SAILORS VALUES (74,'Horatio',9,35.0);
+insert into SAILORS VALUES (85,'Art',3,25.5);
+insert into SAILORS VALUES (95,'Bob',3,63.5);
+
+
+insert into BOATS VALUES (101,'Interlake','blue');
+insert into BOATS VALUES (102,'Interlake','red');
+insert into BOATS VALUES (103,'Clipper','green');
+insert into BOATS VALUES (104,'Marine','red');
+
+
+insert into RESERVES VALUES (22,101,TO_DATE('1998/10/10', 'YYYY/MM/DD'));
+insert into RESERVES VALUES (22,102, TO_DATE('1998-10-10', 'YYYY/MM/DD'));
+insert into RESERVES VALUES (22,103, TO_DATE('1998-08-10', 'YYYY/MM/DD'));
+insert into RESERVES VALUES (22,104, TO_DATE('1998-07-10', 'YYYY/MM/DD'));
+insert into RESERVES VALUES (31,102, TO_DATE('1998-10-11', 'YYYY/MM/DD'));
+insert into RESERVES VALUES (31,103, TO_DATE('1998-06-11', 'YYYY/MM/DD'));
+insert into RESERVES VALUES (31,104, TO_DATE('1998-12-11', 'YYYY/MM/DD'));
+insert into RESERVES VALUES (64,101, TO_DATE('1998-05-09', 'YYYY/MM/DD'));
+insert into RESERVES VALUES (64,102, TO_DATE('1998-08-09', 'YYYY/MM/DD'));
+insert into RESERVES VALUES (74,103, TO_DATE('1998-08-09', 'YYYY/MM/DD'));
+
+
+INSERT INTO Employee VALUES(1, 100, 10);
+INSERT INTO Employee VALUES(2, 200, 20);
+INSERT INTO Employee VALUES(3, 300, 30);
+
+SELECT * FROM SAILORS;
+SELECT * FROM BOATS;
+SELECT * FROM RESERVES;
+SELECT * FROM Employee;

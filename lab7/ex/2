@@ -1,0 +1,21 @@
+create or replace trigger tg
+    before insert or delete or update
+    on SAILORS
+    for each row
+begin
+    case
+    when inserting then
+        if :new.rating <= 5 then
+            raise_application_error(-20111, 'not allow as rating<=5');
+        end if;
+    when deleting then
+        raise_application_error(-20111, 'delete not allowed');
+    when updating then
+        raise_application_error(-20111, 'update not allowed');
+    end case;
+end;
+/
+
+insert into SAILORS VALUES (25,'Dustin',2,45.0);
+update SAILORS SET Age = 50 where Sid = 22;
+delete from SAILORS where Sid = 22;
