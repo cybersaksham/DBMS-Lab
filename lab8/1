@@ -1,0 +1,15 @@
+create or replace trigger trigger1
+before insert on SAILORS
+for each row
+when (new.Rating<=5)
+begin
+raise_application_error(-20111,'not allow as rating<5');
+end;
+/
+
+select * from SAILORS;
+
+insert into SAILORS VALUES (25,'Dustin',8,45.0);
+insert into SAILORS VALUES (100,'Dustin',2,45.0);
+
+select * from SAILORS;

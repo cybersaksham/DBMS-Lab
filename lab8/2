@@ -1,0 +1,22 @@
+create or replace trigger trigger2
+before update on SAILORS
+for each row
+begin
+raise_application_error(-20111,'update not allow');
+end;
+/
+
+create or replace trigger trigger3
+before delete on SAILORS
+for each row
+begin
+raise_application_error(-20111,'delete not allow');
+end;
+/
+
+select * from SAILORS;
+
+update SAILORS SET Age = 50 where Sid = 22;
+delete from SAILORS where Sid = 22;
+
+select * from SAILORS;
