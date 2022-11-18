@@ -1,0 +1,26 @@
+create table dobs(
+    name Varchar2(20), 
+    dob date
+);
+
+insert into dobs Values('asmit' ,'02-APR-98');
+select dob from dobs;
+
+SELECT TO_CHAR(dob, 'YYYY/MM/DD') AS newdob FROM dobs;
+
+insert into dobs values('Shyam', '31‐may‐98');
+
+insert into dobs values('Ram' ,to_date('1998/05/31:12:00:00AM','yyyy/mm/dd:hh:mi:ssam'));
+
+alter session set NLS_DATE_FORMAT='yyyy/mm/dd';
+
+select to_char(sysdate, 'yyyy/mm/dd HH24:MI:SS') as "Current Time" from dual;
+
+
+SELECT LEAST(TO_DATE('23‐JAN‐2013','dd-mon-yyyy'), TO_DATE('24‐DEC‐2006','dd-mon-yyyy'))FROM DUAL;
+
+SELECT MONTHS_BETWEEN(SYSDATE,TO_DATE('2006/07/08','yyyy/mm/dd')) FROM DUAL ;
+
+SELECT ADD_MONTHS(sysdate,3) FROM Dual;
+
+SELECT LAST_DAY(SYSDATE)+1 FROM DUAL;

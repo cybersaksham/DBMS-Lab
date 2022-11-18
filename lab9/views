@@ -1,0 +1,43 @@
+-- View 1
+create table student(
+idno number,
+name varchar2(30),
+grade varchar2(5)
+);
+
+create view vw_student as select * from student;
+create view vw1_student as select idno ,name from student;
+
+insert into student values(1,'Mohak','9');
+select * from vw_student;
+select * from vw1_student;
+
+insert into vw_student values(2,'rohit','9.76');
+update vw_student set name='mohit' where name='rohit';
+delete from vw_student where name='mohit'; 
+
+select * from student;
+
+
+-- View 2
+create table dept (
+deptname varchar2(15),
+deptno number primary key,
+addr varchar2(20),
+city varchar2(15)
+);
+
+create table emp (
+eid varchar2(10) primary key,
+ename varchar2(20),
+salary number,
+deptno number,
+ foreign key (deptno) references dept(deptno)
+);
+
+create view vw_emp as select eid, ename , salary , emp.deptno , deptname , addr, city
+from EMP,DEPT where EMP.deptno=DEPT.deptno;
+
+insert into vw_emp values('2008CH1234','ramesh',10000,10,'CSIS','BITS','PILANI');
+update vw_emp set ename ='mohit' where deptno=10;
+delete from vw_emp where deptno=10;

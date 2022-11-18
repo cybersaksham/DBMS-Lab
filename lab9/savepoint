@@ -1,0 +1,26 @@
+create table dept (
+deptname varchar2(15),
+deptno number primary key,
+addr varchar2(20),
+city varchar2(15)
+);
+
+create table emp (
+eid varchar2(10) primary key,
+ename varchar2(20),
+salary number,
+deptno number,
+ foreign key (deptno) references dept(deptno)
+);
+
+SET TRANSACTION READ WRITE;
+insert into emp (eid,ename,salary) values(109,'Sami',3000);
+exec SAVEPOINT aa;
+
+insert into emp (eid,ename,salary) values(110,'Mounika',3001);
+exec savepoint bb;
+
+insert into emp (eid,ename,salary) values(111,'Kashyap', 3002);
+rollback to savepoint aa;
+
+select * from emp;
